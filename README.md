@@ -15,8 +15,8 @@ Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.co
 3. `02_FeatureEngineering.ipynb`
     1. Feature generation
     2. Feature transformation
-    3. Feature encoding
-    4. Feature selection
+    3. Feature selection
+    4. Feature encoding
     5. EngineerFeatures class
 
 4. 
