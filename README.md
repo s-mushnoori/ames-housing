@@ -15,9 +15,10 @@ Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.co
 3. `02_FeatureEngineering.ipynb`
     1. Feature generation
     2. Feature transformation
-    3. Feature selection
-    4. Feature encoding
+    3. Feature encoding
+    4. Feature selection
     5. EngineerFeatures class
+    6. Target transformation
 
 4. 
 
@@ -91,6 +92,37 @@ As noted in the EDA, some features are highly skewed. We write a function called
 
 `find_skew()` can also return the names of skewed features. We use this information to apply a log transform to the features using `np.log1p()`. Note that `np.log1p()` calculates log(x+1), which accounts for cases where x=0, since log(0) is undefined.
 
+### 3.3 Feature encoding
+
+There are many categorical variables in this dataset. We first check if both the test and train sets have the same values in all the categorical variables. This is necessary to ensure the train and test sets get encoded properly. In a real world setting, we need to do our best to ensure that the train set is completely representative of the test set.
+
+One example is the feature `'Electrical'` where the train set and test set do not have the same number of values. This would mean that encoding these would give different features. 
+
+The best way to avoid this is go back to our preprocessing step and create a combined dataset, and later separate it again into the original train and test sets after feature engineering. This will ensure that both the train and test sets will have the same features after encoding.
+
+We use `pd.get_dummies()` to automatically select and encode the categorical features. We also drop the first encoded feature to reduce multicolinearity (features being correlated). 
+
+Note: An easy example to demonstrate this is to consider a situation where we have a binary column for Sex with values 'M' and 'F'. If we were to encode this column to two columns 'Sex_M' and 'Sex_F', a male would have values 1 and 0 for these features respectively. In this sitution, the value of the encoded feature 'Sex_M' perfectly predicts the value of 'Sex_F'. This is what we want to avoid. 
+
+### 3.4 Feature selection
+
+
+### 3.5 EngineerFeatures class
+
+Now that we know how we will feature engineer this class, we define a class `EngineerFeatures`  to handle this for us. This class will have methods `fit()` and `transform()`  like our `Preprocessor` class. 
+
+### 3.6 Target transformation
+
+Also important is to check whether the target variable is normally distributed, and if not, to transform it so it is closer to being normally distributed.
+
+* Let's first get the target variable and plot it
+
+* Then we can use the fit feature of a distplot to see how closely the target variable fits a normal distribution
+
+* Then we can do the same with a log transformed target variable and look at the results
+
+We can see in the plots below that the transformed `'SalePrice'` is much closer to being normally distributed: 
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/skew.PNG" width=400>
 
 ---
 
