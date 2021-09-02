@@ -41,6 +41,8 @@ We note the following details about the features:
 
 5. **Finally, we note that `'MSSubClass'` is actually a categorical feature. This will be converted to a `str` type and treated as a categorical variable during feature engineering**
 
+### 1.1 Preprocessor class
+
 With this strategy in mind, we create a `Preprocessor` class where a `.fit()` method calculates the modes and medians based on the training set and a `.transform()` method imputes the null values with the appropriate values. 
 
 ---
@@ -65,7 +67,29 @@ With this strategy in mind, we create a `Preprocessor` class where a `.fit()` me
 ## 3. `02_FeatureEngineering.ipynb`
 
 ### 3.1 Feature generation
-asdasda alksjdla
+
+Some features are overly granular. We can combine these features into a single feature.
+
+* We have seen through EDA that unfinished vs finished surface areas matter less than total surface areas. So keep `'TotalBsmtSF'` and drop `'BsmtFinSF1'`, `'BsmtFinSF2'`, `'BsmtUnfSF'`
+
+* Keep `'GrLivArea'` and drop `'1stFlrSF'`, `'2ndFlrSF'`, `'LowQualFinSF'`.
+  * We can also retain `'2ndFlrSF'` by making a new binary variable `'Has2ndFlr'`
+
+* Combine `'BsmtFullBath'` and `'BsmtHalfBath'` into `'BsmtTotalBath'`
+
+* Combine `'FullBath'` and `'HalfBath'` into `'AbvGrTotalBath'`
+
+* Combine `'WoodDeckSF'`, `'OpenPorchSF'`, `'EnclosedPorch'`, `'3SsnPorch'`, `'ScreenPorch'` into `'TotalPorchAr'`
+
+* Note: No changes to features related to the garage
+
+### 3.2 Feature transformations
+
+As noted in the EDA, some features are highly skewed. We write a function called `find_skew()` which shows the features and how skewed they are:
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/LotAreaSkew.PNG" width=440>
+
+`find_skew()` can also return the names of skewed features. We use this information to apply a log transform to the features using `np.log1p()`. Note that `np.log1p()` calculates log(x+1), which accounts for cases where x=0, since log(0) is undefined.
+
 
 ---
 
