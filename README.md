@@ -85,8 +85,9 @@ Some features are overly granular. We can combine these features into a single f
 
 ### 3.2 Feature transformations
 
-As noted in the EDA, some features are highly skewed. We write a function called `find_skew()` which shows the features and how skewed they are:
-<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/LotAreaSkew.PNG" width=440>
+As noted in the EDA, some features are highly skewed. We write a function called `find_skew()` which shows the features and how skewed they are. A snippet of this dataframe is shown below:
+
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/skew.PNG" width=400>
 
 `find_skew()` can also return the names of skewed features. We use this information to apply a log transform to the features using `np.log1p()`. Note that `np.log1p()` calculates log(x+1), which accounts for cases where x=0, since log(0) is undefined.
 
