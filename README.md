@@ -122,7 +122,7 @@ Also important is to check whether the target variable is normally distributed, 
 * Then we can do the same with a log transformed target variable and look at the results
 
 We can see in the plots below that the transformed `'SalePrice'` is much closer to being normally distributed: 
-<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/skew.PNG" width=400>
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/targettransform.PNG" width=400>
 
 ---
 
