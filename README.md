@@ -16,11 +16,10 @@ Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.co
     1. Feature generation
     2. Feature transformation
     3. Feature encoding
-    4. Feature selection
-    5. EngineerFeatures class
-    6. Target transformation
+    4. EngineerFeatures class
+    5. Target transformation
 
-4. 
+4. `03_ModelTraining.ipynb`
 
 ---
 ## 1. `00_DataPrep.ipynb`
@@ -104,14 +103,12 @@ We use `pd.get_dummies()` to automatically select and encode the categorical fea
 
 Note: An easy example to demonstrate this is to consider a situation where we have a binary column for Sex with values 'M' and 'F'. If we were to encode this column to two columns 'Sex_M' and 'Sex_F', a male would have values 1 and 0 for these features respectively. In this sitution, the value of the encoded feature 'Sex_M' perfectly predicts the value of 'Sex_F'. This is what we want to avoid. 
 
-### 3.4 Feature selection
 
-
-### 3.5 EngineerFeatures class
+### 3.4 EngineerFeatures class
 
 Now that we know how we will feature engineer this class, we define a class `EngineerFeatures`  to handle this for us. This class will have methods `fit()` and `transform()`  like our `Preprocessor` class. 
 
-### 3.6 Target transformation
+### 3.5 Target transformation
 
 Also important is to check whether the target variable is normally distributed, and if not, to transform it so it is closer to being normally distributed.
 
@@ -125,5 +122,18 @@ We can see in the plots below that the transformed `'SalePrice'` is much closer 
 <img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/targettransform.PNG">
 
 ---
+## 4. `03_ModelTraining.ipynb`
 
+Now we will use Pycaret to decide how to procede. Although Pycaret has a lot of utility, we just use it to select a model. We first need to install pycaret with the following command:
+`!pip install pycaret[full]`
 
+Now we use the `compare_models()` function to see how commonly used algorithms perform on our set. Here, the function uses 10-fold cross validation on the training set to test the different algorithms. Below is a plot showing the results:
+
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/pycaret.PNG" width=600>
+
+* We note that Catboost Regressor, Bayesian Ridge, Ridge Regression, and Light Grandient Boosting Machine are the top 4 performers. 
+* Also notice that popular algorithms like Linear Regression, Random Forest, and XGBoost perform rather poorly in comparison. 
+
+Note: All the code relating to Pycaret is commented out in the notebook because it is rather time-consuming and verbose.
+
+Based on this information, we choose Catboost as our baseline model. We will eventually ensemble the top 4 models to see if this improves results over just using the top model. 
