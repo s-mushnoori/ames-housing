@@ -2,7 +2,7 @@
 Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data)
 
 ---
-**Note:** This readme will guide you through the steps I took to complete this project. To view the final refactored script, please take a look at `ames-housing.py`
+**Note:** This readme will guide you through the steps I took to complete this project. To view the final refactored script, please take a look at [`ames-housing.py`]()
 
 ---
 
@@ -20,6 +20,13 @@ Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.co
     5. Target transformation
 
 4. `03_ModelTraining.ipynb`
+    1. Preliminary model selection using Pycaret
+    2. ModelContainer class
+    3. Baseline model
+    4. Hyperparameter tuning
+    5. Ensembling
+
+5. Final Results
 
 ---
 ## 1. `00_DataPrep.ipynb`
@@ -124,6 +131,8 @@ We can see in the plots below that the transformed `'SalePrice'` is much closer 
 ---
 ## 4. `03_ModelTraining.ipynb`
 
+### 4.1 Preliminary model selection using Pycaret
+
 Now we will use Pycaret to decide how to procede. Although Pycaret has a lot of utility, we just use it to select a model. We first need to install pycaret with the following command:
 `!pip install pycaret[full]`
 
@@ -136,4 +145,34 @@ Now we use the `compare_models()` function to see how commonly used algorithms p
 
 Note: All the code relating to Pycaret is commented out in the notebook because it is rather time-consuming and verbose.
 
-Based on this information, we choose Catboost as our baseline model. We will eventually ensemble the top 4 models to see if this improves results over just using the top model. 
+
+### 4.2 Baseline model
+
+Based on this information, we choose Catboost as our baseline model. 
+With 10-fold cross-validation, this model had a **mean MSE of 0.01494 +/- 0.0047**.
+
+###  4.3 Hyperparameter tuning
+
+Manual hyperparameter tuning was performed using `RandomizedSearchCV` for all four chosen algorithms, and the results are summarized in the table below:
+
+|Model|Mean MSE|Std. dev. MSE|
+|:--:|:--:|:--:|
+|Baseline CatBoost Regressor|0.014941|0.004726| 
+|CatBoost Regressor|0.014699|0.004863|
+|Bayesian Ridge|0.016517|0.005963|
+|Light Gradient Boosted Machines|0.016988|0.004877|
+|Ridge Regression|0.019511|0.006157|
+
+As we can see, the hyperparameter tuning improved the results of the CatBoost Regressor model.
+
+
+### 4.4 Ensembling
+
+Stacking machine learning models can be a powerful technique. Here we use a simple stacking method and use a weighted average to get the final predictions. The idea is that we are using different types of algorithms that approach the problem in different ways. Combining our models this way allows us to improve the model. However, we need to consider the real world use cases for this. Ensembling increases the model complexity and thus the explainability. Ensemble models will also have a longer runtime, which may make them less valuable for real world applications. 
+
+The trade-off between a slight improvement in model performance and an increase in complexity should be carefully considered before deploying the model into production. 
+
+---
+## Final Results
+
+The final ensemble model gave rank of 369/4567, a **top 8% score**! This was an improvement from rank  584 when using the best performing model with ensembling.
