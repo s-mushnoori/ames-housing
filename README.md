@@ -7,29 +7,29 @@ Price prediction on the Ames housing [dataset from Kaggle](https://www.kaggle.co
 ---
 
 # Table of Contents
-1. `00_DataPrep.ipynb`
+1. **Data Perparation:** `00_DataPrep.ipynb`
     1. Preprocessor class
 
-2. `01_EDA.ipynb` 
+2. **Exploratory Data Analysis:** `01_EDA.ipynb` 
 
-3. `02_FeatureEngineering.ipynb`
+3. **Feature Engineering:** `02_FeatureEngineering.ipynb`
     1. Feature generation
     2. Feature transformation
     3. Feature encoding
     4. EngineerFeatures class
     5. Target transformation
 
-4. `03_ModelTraining.ipynb`
+4. **Model Training:** `03_ModelTraining.ipynb`
     1. Preliminary model selection using Pycaret
     2. ModelContainer class
     3. Baseline model
     4. Hyperparameter tuning
     5. Ensembling
 
-5. Final Results
+5. **Final Results**
 
 ---
-## 1. `00_DataPrep.ipynb`
+## 1. Data Preparation
 
 First we explore the data and come up with a strategy to deal with missing values. 
 
@@ -53,7 +53,7 @@ We note the following details about the features:
 With this strategy in mind, we create a `Preprocessor` class where a `.fit()` method calculates the modes and medians based on the training set and a `.transform()` method imputes the null values with the appropriate values. 
 
 ---
-## 2. `01_EDA.ipynb`
+## 2. Exploratory Data Analysis
 
 * **Categorical features such as the neighborhood affecting sale price:**
 <img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/Neighborhood.PNG">
@@ -71,7 +71,7 @@ With this strategy in mind, we create a `Preprocessor` class where a `.fit()` me
 <img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/1stFlrSkew.PNG" width=440>
 
 ---
-## 3. `02_FeatureEngineering.ipynb`
+## 3. Feature Engineering
 
 ### 3.1 Feature generation
 
@@ -129,7 +129,7 @@ We can see in the plots below that the transformed `'SalePrice'` is much closer 
 <img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/targettransform.PNG">
 
 ---
-## 4. `03_ModelTraining.ipynb`
+## 4. Model Training
 
 ### 4.1 Preliminary model selection using Pycaret
 
@@ -149,7 +149,7 @@ Note: All the code relating to Pycaret is commented out in the notebook because 
 ### 4.2 Baseline model
 
 Based on this information, we choose Catboost as our baseline model. 
-With 10-fold cross-validation, this model had a **mean MSE of 0.01494 +/- 0.0047**.
+With 10-fold cross-validation, this model had a **mean MSE of 0.014905 +/- 0.004726**.
 
 ###  4.3 Hyperparameter tuning
 
@@ -157,11 +157,11 @@ Manual hyperparameter tuning was performed using `RandomizedSearchCV` for all fo
 
 |Model|Mean MSE|Std. dev. MSE|
 |:--:|:--:|:--:|
-|Baseline CatBoost Regressor|0.014941|0.004726| 
+|Baseline CatBoost Regressor|0.014905|0.004726| 
 |CatBoost Regressor|0.014699|0.004863|
-|Bayesian Ridge|0.016517|0.005963|
-|Light Gradient Boosted Machines|0.016988|0.004877|
-|Ridge Regression|0.019511|0.006157|
+|Light Gradient Boosted Machines|0.015441|0.003787|
+|Bayesian Ridge|0.0162954|0.005975|
+|Ridge Regression|0.016512|0.005963|
 
 As we can see, the hyperparameter tuning improved the results of the CatBoost Regressor model.
 
@@ -175,4 +175,6 @@ The trade-off between a slight improvement in model performance and an increase 
 ---
 ## Final Results
 
-The final ensemble model gave rank of 369/4567, a **top 8% score**! This was an improvement from rank  584 when using the best performing model with ensembling.
+The final ensemble model gave rank of 336/4847, a **top 7% score**! This was an improvement from rank 584 when using the best performing model without ensembling.
+
+<img  src="https://github.com/s-mushnoori/ames-housing/blob/main/Images/kaggleresult.PNG" width=800>
